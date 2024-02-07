@@ -6,13 +6,13 @@ import usbtmc  # pip install usbtmc
 from Rigol_DHO900 import connection_ip, connection_usb, DHO900
 
 def main():
-    
+
     # for usb connection
     vendor_id = 0x1AB1
     product_id = 0x044C
     instrument = connection_usb(vendor_id, product_id)
     print(instrument.get_identification())
-    
+
     # for ethernet connection
     ip_rigol = "192.168.178.32"
     instrument = connection_ip(ip_rigol)
@@ -20,7 +20,7 @@ def main():
 
     Rigol = DHO900(instrument)
     print(Rigol.conn.ask(":ACQuire:MDEPth?"))
-    
+
     print(Rigol.conn.ask(":ACQuire:MDEPth?"))
     print("CHANnel1:DISPlay", Rigol.conn.ask(":CHANnel1:DISPlay?"))
     print("CHANnel2:DISPlay", Rigol.conn.ask(":CHANnel2:DISPlay?"))
@@ -37,21 +37,22 @@ def main():
 
     Rigol.conn.write(":RUN")
 
+    # Plot data points
+
     for i in range(10):
         Rigol.read_chanel(1)
     print(Rigol.conn.ask(":SYSTem:ERRor?"))
     print(Rigol.conn.ask("*STB?"))
     Rigol.conn.close()
 
-
     fig, ax = plt.subplots()
-    ax.plot(points_CH1)
-    ax.plot(points_CH2)
-    ax.plot(points_CH2_raw)
+    ax.plot(points_CH1, label="CH1")
+    ax.plot(points_CH2, label="CH2")
+    ax.plot(points_CH2_raw, label="CH2 RAW")
 
-    ax.set(xlabel="time", ylabel="voltage", title="Plot")
+    ax.set(xlabel="Sample", ylabel="Voltage / V", title="Rigol_DHO900 Plot")
     ax.grid()
-
+    ax.legend()
     plt.show()
 
 

@@ -1,7 +1,6 @@
 import vxi11  # pip install python-vxi11
 import numpy as np
-import matplotlib.pyplot as plt
-import usbtmc  # pip install usbtmc
+import usbtmc  # pip install python-usbtmc
 
 
 class connection_ip(vxi11.Instrument):
@@ -13,7 +12,7 @@ class connection_ip(vxi11.Instrument):
 
     def __del__(self):
         self.close()
-        
+
 class connection_usb(usbtmc.Instrument):
     def __init__(self, vendor_id, product_id, *args, **kwargs):
         super(connection_usb, self).__init__(vendor_id, product_id, *args, **kwargs)
